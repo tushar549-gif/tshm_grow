@@ -3,6 +3,7 @@ const User = require("./models/User"); // Import User Model
 const Deposit = require("./models/Deposit"); // Import Deposit Model
 const Withdraw = require("./models/Withdraw"); // Import Withdraw Model
 const mongoose = require("mongoose"); // Import Mongoose
+const express = require("express");
 
 // Connect to MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI)
@@ -753,3 +754,16 @@ bot.launch().then(() => {
 
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
+
+// Express server to keep Render service alive
+const app = express();
+app.get("/", (req, res) => {
+  res.send("Bot is running...");
+});
+
+// Start Express server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
